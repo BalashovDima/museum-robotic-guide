@@ -1,7 +1,8 @@
 #include "Arduino.h"
+#include "GyverTM1637.h"
 #include "disp-control-ir.h"
 
-bool Disp_Control_IR::handleClick(unsigned long btnCode) {
+uint8_t Disp_Control_IR::handleClick(unsigned long btnCode) {
 	switch(btnCode) {
 		case BUTTON_1: appendDigit(1); break;
 		case BUTTON_2: appendDigit(2); break;
@@ -18,34 +19,53 @@ bool Disp_Control_IR::handleClick(unsigned long btnCode) {
 		case BUTTON_RIGHT: incrementDigit(); break;
 		case BUTTON_LEFT: decrementDigit(); break;
 		case BUTTON_HASHTAG: 
-			settingMode = true;
+			mode = 1;
 			currentNumber = 1; 
 			break;
 		case BUTTON_OK:
-      disp.displayInt(currentNumber);
-			settingMode = false; 
-			return true;
-			break;
+			if(mode == 1) {
+				disp.displayInt(currentNumber);
+				mode = 0; 
+				return 1;
+			} else if(mode == 0) {
+				mode = 2;
+				return 2;
+				break;
+			} else if(mode == 2) {
+				disp.displayInt(currentNumber);
+				mode = 0;
+				return 2;
+				break;
+			}
 		default: // in case unknow code received, don't change anything
-			if(settingMode) return false;
-			else return true;
+			return 0;
 	}
 
 	disp.displayInt(currentNumber);
 	blinkTimer = millis();
 	blinkState = true;
-	return false;
+	return 0;
 }
 
 void Disp_Control_IR::updateDisp() {
-	if(settingMode) {
+	if(mode) {
 		if(millis() - blinkTimer >= BLINK_DELAY) {
 			if(blinkState) {
-        disp.clear();
+				if(mode == 1) {
+	        disp.clear();
+				} else if(mode == 2){
+					disp.displayByte(0, 0x00); // clear the most left digit place
+				}
+
         blinkTimer = millis();
         blinkState = false;
       } else {
-        disp.displayInt(currentNumber);
+      	if(mode == 1) {
+	        disp.displayInt(currentNumber);
+				} else if(mode == 2){
+					disp.displayByte(0, 0x73); // show 'P' in the most left digit place
+				}
+		
         blinkTimer = millis();
         blinkState = true;
       }
@@ -54,7 +74,7 @@ void Disp_Control_IR::updateDisp() {
 }
 
 bool Disp_Control_IR::isSetting() {
-	return settingMode;
+	if(mode == 1) return true;
 }
 
 int Disp_Control_IR::getCurrentNumber() {
@@ -62,19 +82,16 @@ int Disp_Control_IR::getCurrentNumber() {
 }
 
 void Disp_Control_IR::appendDigit(int digit) {  
-	settingMode = true;
 	currentNumber = currentNumber*10 + digit;
   currentNumber = currentNumber % 100; // Ensure the number stays within the 4-digit range
 }
 
 void Disp_Control_IR::incrementDigit() {
-	settingMode = true;
 	if(currentNumber == 99) currentNumber = 1;
 	else currentNumber++;
 }
 
 void Disp_Control_IR::decrementDigit() {
-	settingMode = true;
 	if(currentNumber == 1) currentNumber = 9;
 	else currentNumber--;
 }

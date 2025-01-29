@@ -29,7 +29,7 @@ class Disp_Control_IR {
   public:
     Disp_Control_IR(GyverTM1637& disp) : disp(disp) {}
 
-    bool handleClick(unsigned long btnCode); // returns true when number set (pressed ok)
+    uint8_t handleClick(unsigned long btnCode); // returns true when number set (pressed ok)
     void updateDisp();
     bool isSetting();
     int getCurrentNumber();
@@ -38,7 +38,7 @@ class Disp_Control_IR {
     GyverTM1637& disp;
 
     int currentNumber = 1;
-    bool settingMode = true; // when setting, number blinks
+    uint8_t mode = 1; // 0 - playing tour, 1 - setting number, 2 - paused
     unsigned long blinkTimer = 0;
     bool blinkState = true; // on when true; off when false
 

@@ -29,7 +29,19 @@ DfMp3 dfmp3(secondarySerial);
 bool secondFinishCall = false;
 uint16_t trackCountInFolder1;
 uint16_t trackCountInFolder2;
-uint8_t action = 0; 
+uint8_t action = 0; // 0 - unknown, 1 - play track
+uint8_t tour = dispController.getCurrentNumber();
+uint8_t tourActionIndex = 0;
+uint8_t tourAudioIndex = 0;
+uint8_t tourPointerIndex = 0;
+char tours[2][100] = {
+  {
+    "t",
+  },
+  {
+    "t",
+  }
+};
 
 
 // implement a notification class,
@@ -121,9 +133,6 @@ void setup(){
   Serial.print("volume ");
   Serial.println(STARTING_VOLUME);
 
-  dfmp3.playFolderTrack16(1, 1); // just to check
-  delay(5000);
-  dfmp3.pause();
 
   pinMode(LED_BUILTIN, OUTPUT);
 }
@@ -132,11 +141,29 @@ void loop(){
   dispController.updateDisp();
   
   if (irrecv.decode(&results)){
-    if(dispController.handleClick(results.value)) {
-      digitalWrite(LED_BUILTIN, HIGH);
-    } else {
-      digitalWrite(LED_BUILTIN, LOW);
+    uint8_t action = dispController.handleClick(results.value);
+
+    switch(action) {
+      case 0:
+        break;
+      case 1: // 'ok' pressed for confirming number
+        tour = dispController.getCurrentNumber();
+        dfmp3.playFolderTrack16(1, 1); // just to check
+        break;
+      case 2: // 'ok' pressed for pausing/resuming
+        DfMp3_Status status = dfmp3.getStatus();
+        // Check the current state of the player and toggle play/pause
+        if (status.state == DfMp3_StatusState_Playing) {
+          dfmp3.pause();  // Pause playback
+          Serial.println("Paused");
+        } 
+        else if (status.state == DfMp3_StatusState_Paused || status.state == DfMp3_StatusState_Idle) {
+          dfmp3.start();  // Resume or start playback
+          Serial.println("Resumed/Started");
+        }
+        break;
     }
+    
 
     Serial.println(results.value, HEX);
     irrecv.resume();
