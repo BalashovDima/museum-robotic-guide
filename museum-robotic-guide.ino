@@ -4,16 +4,19 @@
 #include <SoftwareSerial.h>
 #include "disp-control-ir.h"
 
+// ------------------ IR remote
 #define IR_RECEIVE_PIN 12
 IRrecv irrecv(IR_RECEIVE_PIN);
 decode_results results;
 
+// ------------------ 7-segment display
 #define CLK 2
 #define DIO 3
 GyverTM1637 disp(CLK, DIO);
 
 Disp_Control_IR dispController(disp); 
 
+// ------------------ DFPlayer Mini
 #define STARTING_VOLUME 20
 class Mp3Notify; // forward declare the notify class, just the name
 
@@ -26,6 +29,14 @@ SoftwareSerial secondarySerial(9, 8); // RX (DF player's TX), TX (DF player's RX
 typedef DFMiniMp3<SoftwareSerial, Mp3Notify> DfMp3;
 DfMp3 dfmp3(secondarySerial);
 
+// ------------------ Stepper motor
+#define GS_NO_ACCEL    
+#include <GyverStepper2.h>
+GStepper2< STEPPER4WIRE> stepper(2048, 7, 5, 6, 4);
+#define START_POINT_SENSOR_PIN 10
+bool look_for_start_point = true;
+
+// ------------------ Common ariables
 bool secondFinishCall = false;
 uint16_t trackCountInFolder1;
 uint16_t trackCountInFolder2;
@@ -133,12 +144,29 @@ void setup(){
   Serial.print("volume ");
   Serial.println(STARTING_VOLUME);
 
+  stepper.reverse(true); // first go backward for finding starting point
+  stepper.setMaxSpeed(500); // speed for setTargetDeg(), which will be used for changing motor's rotation
 
+  pinMode(START_POINT_SENSOR_PIN, INPUT);
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop(){
   dispController.updateDisp();
+  stepper.tick();
+
+  if(look_for_start_point) {
+    if(digitalRead(START_POINT_SENSOR_PIN) == LOW) {
+      stepper.stop();
+      stepper.reset();
+      stepper.reverse(false);
+      look_for_start_point = false;
+      stepper.setTargetDeg((float)180); // for now, just go to 180 degrees (for testing)
+      Serial.println("Stepper motor starting point found");
+    } else {
+      stepper.setSpeed(500); // rotate at speed of 500 steps per second
+    }
+  }
   
   if (irrecv.decode(&results)){
     uint8_t action = dispController.handleClick(results.value);

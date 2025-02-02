@@ -48,7 +48,7 @@ uint8_t Disp_Control_IR::handleClick(unsigned long btnCode) {
 }
 
 void Disp_Control_IR::updateDisp() {
-	if(mode) {
+	if(mode) { // mode: 0 - playing tour, 1 - setting number, 2 - paused
 		if(millis() - blinkTimer >= BLINK_DELAY) {
 			if(blinkState) {
 				if(mode == 1) {
