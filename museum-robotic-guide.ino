@@ -36,6 +36,10 @@ GStepper2< STEPPER4WIRE> stepper(2048, 7, 5, 6, 4);
 #define START_POINT_SENSOR_PIN 10
 bool look_for_start_point = true;
 
+// ------------------ Servo motor
+#include <Servo.h>
+Servo servo;
+
 // ------------------ Common ariables
 bool secondFinishCall = false;
 uint16_t trackCountInFolder1;
@@ -146,6 +150,9 @@ void setup(){
 
   stepper.reverse(true); // first go backward for finding starting point
   stepper.setMaxSpeed(500); // speed for setTargetDeg(), which will be used for changing motor's rotation
+
+  servo.attach(11); // attaches the servo on pin 11 to the servo object
+  servo.write(0); // set servo to 0 degrees
 
   pinMode(START_POINT_SENSOR_PIN, INPUT);
   pinMode(LED_BUILTIN, OUTPUT);
