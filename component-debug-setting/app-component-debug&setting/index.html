@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduino Control</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        
+        <!-- Status -->
+        <div class="status" id="status">Disconnected</div>
+
+        <hr>
+
+        <!-- Servo Control -->
+        <h2>Servo Motor</h2>
+        <input type="number" id="servoDegrees" placeholder="Enter degrees (0-180)" min="0" max="180" />
+        <button onclick="sendServoCommand()">Rotate</button>
+
+        <!-- Stepper Control -->
+        <h2>Stepper Motor</h2>
+        <input type="number" id="stepperDegrees" placeholder="Enter degrees" min="0" max="360" />
+        <button onclick="sendStepperCommand()">Rotate</button>
+        
+        <!-- Laser pointer -->
+        <h2>Laser Pointer</h2>
+        <button onclick="sendCommand('X1')">Turn Laser ON</button>
+        <button onclick="sendCommand('Y1')">Turn Laser OFF</button>
+
+        <!-- GPIO Control -->
+        <h2>GPIO Expander</h2>
+        <div class="gpio-pins-wrapper">
+            <div>
+                <h3>Module 1 (Pins 0-7)</h3>
+                <div id="gpio-buttons-0-7">
+                    <!-- Buttons for pins 0-7 will be generated here -->
+                </div>
+            </div>
+            <div>
+                <h3>Module 2 (Pins 8-15)</h3>
+                <div id="gpio-buttons-8-15">
+                    <!-- Buttons for pins 8-15 will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>Serial Console</h2>
+        <textarea id="serial-console" rows="10" cols="50" readonly></textarea>
+        <button onclick="clearConsole()">Clear Console</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
