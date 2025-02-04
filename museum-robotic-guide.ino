@@ -59,6 +59,9 @@ void pointerOff() {
   #endif
 }
 
+// ------------------ GPIO expander
+#include "PCF8574_Control.h"
+
 // ------------------ Common ariables
 bool secondFinishCall = false;
 uint16_t trackCountInFolder1;
@@ -135,6 +138,8 @@ class Mp3Notify {
 
 void setup(){
   Serial.begin(9600);
+  
+  Wire.begin();// Initialize I2C communication
 
   disp.clear();         // Clear the display
   disp.brightness(7);   // Set maximum brightness
