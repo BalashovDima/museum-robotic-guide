@@ -40,6 +40,25 @@ bool look_for_start_point = true;
 #include <Servo.h>
 Servo servo;
 
+// ------------------ Laser pointer
+#define LASER_PIN A3
+#define LAZER_ANALOG_PIN // if using analog pin for laser pointer
+void pointerOn() {
+  #ifdef LAZER_ANALOG_PIN
+    analogWrite(LASER_PIN, 255);
+  #else
+    digitalWrite(LASER_PIN, HIGH);
+  #endif
+}
+
+void pointerOff() {
+  #ifdef LAZER_ANALOG_PIN
+    analogWrite(LASER_PIN, 0);  
+  #else 
+    digitalWrite(LASER_PIN, LOW);
+  #endif
+}
+
 // ------------------ Common ariables
 bool secondFinishCall = false;
 uint16_t trackCountInFolder1;
@@ -156,6 +175,7 @@ void setup(){
 
   pinMode(START_POINT_SENSOR_PIN, INPUT);
   pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LASER_PIN, OUTPUT);
 }
 
 void loop(){
