@@ -88,6 +88,16 @@ document.getElementById('toggleAll').addEventListener('click', toggleAllGpioPins
 // Call the function to create buttons when the page loads
 document.addEventListener('DOMContentLoaded', createGpioButtons);
 
+function toggleBoxHandler(event) {
+    const header = event.target.closest('.tgglb-div__header');
+    header.classList.toggle('tgglb-div__header_open');
+    header.closest('.tgglb-div').querySelector('.tgglb-div__insides').classList.toggle('tgglb-div__insides_open');
+}
+
+document.querySelectorAll('.tgglb-div__header').forEach(header => {
+    header.addEventListener('click', toggleBoxHandler);
+});
+
 // Function to send a custom command
 function sendCustomCommand() {
     const command = document.getElementById('custom-command').value.trim();

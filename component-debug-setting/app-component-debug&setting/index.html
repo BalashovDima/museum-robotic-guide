@@ -10,7 +10,7 @@
 
 <body>
     <div class="container">
-        
+
         <!-- Status -->
         <div class="status" id="status">Disconnected</div>
 
@@ -21,6 +21,64 @@
         <input type="text" id="custom-command" placeholder="Enter command" />
         <button onclick="sendCustomCommand()">Send Command</button>
 
+        <!-- Command List -->
+        <div class="tgglb-div help-div">
+            <div class="tgglb-div__header">
+                <h2>Show Command List</h2>
+                <span class="tgglb-div__arrow"></span>
+            </div>
+            <div id="" class="tgglb-div__insides">
+                <table id="command-list">
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td>S&lt;angle&gt;</td>
+                        <td>Set Servo position</td>
+                        <td><code>S90</code></td>
+                    </tr>
+                    <tr>
+                        <td>M&lt;angle&gt;</td>
+                        <td>Move Stepper Motor to specified angle</td>
+                        <td><code>M180</code></td>
+                    </tr>
+                    <tr>
+                        <td>H&lt;0-15&gt;</td>
+                        <td>Set GPIO pin HIGH (turn OFF)</td>
+                        <td><code>H5</code></td>
+                    </tr>
+                    <tr>
+                        <td>L&lt;0-15&gt;</td>
+                        <td>Set GPIO pin LOW (turn ON)</td>
+                        <td><code>L5</code></td>
+                    </tr>
+                    <tr>
+                        <td>A&lt;any nubmer&gt;</td>
+                        <td>Turn ALL GPIO pins OFF</td>
+                        <td><code>A1</code></td>
+                    </tr>
+                    <tr>
+                        <td>Z&lt;any nubmer&gt;</td>
+                        <td>Turn ALL GPIO pins ON</td>
+                        <td><code>Z1</code></td>
+                    </tr>
+                    <tr>
+                        <td>X&lt;any nubmer&gt;</td>
+                        <td>Turn Laser ON</td>
+                        <td><code>X1</code></td>
+                    </tr>
+                    <tr>
+                        <td>Y&lt;any nubmer&gt;</td>
+                        <td>Turn Laser OFF</td>
+                        <td><code>Y1</code></td>
+                    </tr>
+                </table>
+                
+            </div>
+        </div>
+
         <!-- Servo Control -->
         <h2>Servo Motor</h2>
         <input type="number" id="servoDegrees" placeholder="Enter degrees (0-180)" min="0" max="180" />
@@ -30,7 +88,7 @@
         <h2>Stepper Motor</h2>
         <input type="number" id="stepperDegrees" placeholder="Enter degrees" min="0" max="360" />
         <button onclick="sendStepperCommand()">Rotate</button>
-        
+
         <!-- Laser pointer -->
         <h2>Laser Pointer</h2>
         <button onclick="sendCommand('X1')">Turn Laser ON</button>

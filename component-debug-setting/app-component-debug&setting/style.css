@@ -75,3 +75,103 @@ button:hover {
     background: #f9f9f9;
     resize: none;
 }
+
+.tgglb-div {
+    border: 1px solid #a7a7a7;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 15px;
+    width: auto;
+    /* max-width: 500px; */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: white; 
+}
+
+.help-div {
+    box-shadow: none;
+    border: none;
+    width: auto;
+    margin: auto;
+}
+
+.tgglb-div__header {
+    transition: background-color 0.3s ease;
+    background-color: #ffffff;
+    color: white;
+    /* padding: 12px 15px; */
+    cursor: pointer;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    font-weight: bold;
+    border-radius: 5px 5px 0 0;
+}
+
+.help-div .tgglb-div__header h2:hover {
+    /* color: #0967cb; */
+    text-decoration: underline;
+}
+
+.tgglb-div__header h2 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.tgglb-div__arrow {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border: solid #007BFF;
+    border-width: 2px 2px 0 0;
+    transform: rotate(-135deg);
+    transition: transform 0.3s ease;
+    margin: 0 10px;
+}
+
+.tgglb-div__insides {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease, padding 0.3s ease;
+    background-color: white; 
+    color: #3E4A33;
+    padding: 0 15px;
+}
+
+.tgglb-div__insides_open {
+    height: auto;
+    padding: 10px 15px;
+}
+
+.tgglb-div__header_open {
+    color: #9E8C6D;
+    background-color: white; 
+    border-bottom: none;
+}
+
+.tgglb-div__header_open .tgglb-div__arrow {
+    border-width: 2px 2px 2px 2px;
+    transform: rotate(-405deg);
+}
+
+/* Table Styling */
+#command-list {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+}
+
+#command-list th, #command-list td {
+    border: 1px solid #C5B397;
+    padding: 8px;
+    text-align: left;
+    font-size: 14px;
+}
+
+#command-list th {
+    background-color: #C5B397;
+    color: white;
+}
+
+#command-list tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light gray for better contrast */
+}
