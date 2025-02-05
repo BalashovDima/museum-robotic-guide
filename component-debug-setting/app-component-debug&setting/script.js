@@ -52,6 +52,11 @@ function createGpioButtons() {
 
 // Function to toggle GPIO pin state
 function toggleGpioPin(pin) {
+    if (!writer) {
+        alert('Please connect to the Arduino first.');
+        return;
+    }
+    
     const module = pin < 8 ? 1 : 2; // Determine module based on pin number
     const pinNumber = pin < 8 ? pin : pin - 8; // Map pin to 0-7 for the module
     const newState = !gpioStates[pin]; // Toggle state
@@ -69,6 +74,17 @@ function toggleGpioPin(pin) {
     gpioStates[pin] = newState;
 }
 
+function toggleAllGpioPins() {
+    if (!writer) {
+        alert('Please connect to the Arduino first.');
+        return;
+    }
+
+    for (const pin in gpioStates) {
+        toggleGpioPin(parseInt(pin));
+    }
+}
+document.getElementById('toggleAll').addEventListener('click', toggleAllGpioPins);
 // Call the function to create buttons when the page loads
 document.addEventListener('DOMContentLoaded', createGpioButtons);
 
