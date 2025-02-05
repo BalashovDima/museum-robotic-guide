@@ -56,7 +56,7 @@ function toggleGpioPin(pin) {
         alert('Please connect to the Arduino first.');
         return;
     }
-    
+
     const module = pin < 8 ? 1 : 2; // Determine module based on pin number
     const pinNumber = pin < 8 ? pin : pin - 8; // Map pin to 0-7 for the module
     const newState = !gpioStates[pin]; // Toggle state
@@ -87,6 +87,17 @@ function toggleAllGpioPins() {
 document.getElementById('toggleAll').addEventListener('click', toggleAllGpioPins);
 // Call the function to create buttons when the page loads
 document.addEventListener('DOMContentLoaded', createGpioButtons);
+
+// Function to send a custom command
+function sendCustomCommand() {
+    const command = document.getElementById('custom-command').value.trim();
+    if (command === '') {
+        alert('Please enter a command.');
+        return;
+    }
+    sendCommand(command); // Send the custom command
+    document.getElementById('custom-command').value = ''; // Clear the input field
+}
 
 // Connect button (optional)
 document.addEventListener('DOMContentLoaded', () => {
@@ -130,7 +141,7 @@ async function readSerial() {
             const { value, done } = await reader.read();
             if (done) break;
             const text = decoder.decode(value);
-            if(text === '\n') {
+            if (text === '\n') {
                 logToConsole(`-> ${message}`); // Log the received message
                 message = '';
             } else {
